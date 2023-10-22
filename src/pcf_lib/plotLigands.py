@@ -43,7 +43,7 @@ class atomplot:
 						if np.abs(np.dot(vect,  dist)) < np.dot(dist,dist)*1.2:
 							plt.plot([np.dot(a1, self.plotX), np.dot(a2, self.plotX)], 
 								[ np.dot(a1, self.plotY), np.dot(a2, self.plotY)], 
-								color='grey', lw='3', zorder = np.mean([np.dot(a1, self.plotZ), np.dot(a2, self.plotZ)]))
+								color='grey', lw='1', zorder = np.mean([np.dot(a1, self.plotZ), np.dot(a2, self.plotZ)]))
 
 		xvals = [np.dot(a, self.plotX) for a in at for at in self.atoms]
 		yvals = [np.dot(a, self.plotY) for a in at for at in self.atoms]
