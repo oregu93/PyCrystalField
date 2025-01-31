@@ -39,6 +39,13 @@ class CifFile:
 				bb = self._destringify( line.split()[1])
 			elif line.startswith('_cell_angle_gamma'):
 				cc = self._destringify( line.split()[1])
+				print("Debug: Extracted values ->", "a:", a if 'a' in locals() else "Not found",
+                                  "b:", b if 'b' in locals() else "Not found",
+                                  "c:", c if 'c' in locals() else "Not found",
+                                  "aa:", aa if 'aa' in locals() else "Not found",
+                                  "bb:", bb if 'bb' in locals() else "Not found",
+                                  "cc:", cc if 'cc' in locals() else "Not found") # test
+
 				print('unit cell:', a,b,c,aa,bb,cc)
 
 			# Find the atoms within the unit cell
