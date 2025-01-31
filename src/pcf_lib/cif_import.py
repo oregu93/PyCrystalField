@@ -39,7 +39,7 @@ class CifFile:
 				bb = self._destringify( line.split()[1])
 			elif line.startswith('_cell_angle_gamma'):
 				cc = self._destringify( line.split()[1])
-				print('unit cell:', a,b,c,aa,bb,cc)
+				print('unit cell:'a,b,c,aa,bb,cc)
 
 			# Find the atoms within the unit cell
 			#elif (line.startswith("loop_") and lines[i+1].startswith(" _atom_site_label")):
