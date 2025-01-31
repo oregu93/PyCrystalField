@@ -39,7 +39,7 @@ class CifFile:
 				bb = self._destringify( line.split()[1])
 			elif line.startswith('_cell_angle_gamma'):
 				cc = self._destringify( line.split()[1])
-				print('unit cell:'a,b,c,aa,bb,cc)
+				print('unit cell:', a,b,c,aa,bb,cc)
 
 			# Find the atoms within the unit cell
 			#elif (line.startswith("loop_") and lines[i+1].startswith(" _atom_site_label")):
@@ -147,12 +147,16 @@ class CifFile:
 
 		self.asymunitcell = list(sites)
 		# Operate on asymmetric unit cell with all symops and then eliminate duplicates
+		print(f"Number of atomic sites: {len(sites)}") # test
+		print(f"Number of symmetry operations: {len(symops)}") # test
 		self.MakeUnitCell(sites,symops)
 		self.symops = symops
 
 		# Define unit cell using lattice class
+		if any(v is None for v in [a, b, c, aa, bb, cc]): # test
+			raise ValueError("One or more unit cell parameters are missing!")
 		self.latt = lattice(a,b,c,aa,bb,cc)
-		#print(a,b,c,aa,bb,cc)
+		print(a,b,c,aa,bb,cc) # test
 
 		print(".cif import complete.")
 
