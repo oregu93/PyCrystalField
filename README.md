@@ -18,7 +18,7 @@ PyCrystalField requires Python 3; downloading Anaconda is recommended, as PyCrys
 
 ## For documentation, see [here](https://github.com/asche1/PyCrystalField/wiki)
 
-### Update (July 23, 2025) to version 2.4.1
+### Update (July 23, 2026) to version 2.4.1
 
 Added the CEF_Phon_obj object and DFT_phonon_CEF objects. 
 
