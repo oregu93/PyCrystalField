@@ -18,6 +18,18 @@ PyCrystalField requires Python 3; downloading Anaconda is recommended, as PyCrys
 
 ## For documentation, see [here](https://github.com/asche1/PyCrystalField/wiki)
 
+### Update (July 23, 2026) to version 2.4.1
+
+Added the CEF_Phon_obj object and DFT_phonon_CEF objects. 
+
+CEF_Phon_obj takes a CFLevels object and a phonon distortion expressed in Stevens Operators, and computes a full CEF+phonon spectrum (as in https://doi.org/10.1103/4ps1-y3pk) 
+
+DFT_phonon_CEF takes a phonopy mesh.yaml file and a PyCrystalField Ligands object and computes the phonon distortions of the ligand cage and uses the point charge approximation to turn this into a phonon CEF distortion operator. 
+
+Added an example in examples/CEF-Phonon for how to use these. 
+
+Also added the __deepcopy__ as an attribute of CFLevels class. 
+
 ### Update (April 18, 2025) to version 2.3.11
 
 Added CFLevels.Lig.LatticeTransformM to the CFLevels object upon importing the .cif file. This matrix transforms from Cartesian space to ABC space.

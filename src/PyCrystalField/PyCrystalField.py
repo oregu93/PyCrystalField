@@ -15,12 +15,13 @@ from pcf_lib.Operators import Ket, Operator, LSOperator
 from pcf_lib.StevensOperators import StevensOp, LS_StevensOp
 from pcf_lib.PointChargeConstants import *
 from pcf_lib.PCF_misc_functions import *
+from pcf_lib.PhononCEFlib import *
 from numba import njit #, jitclass
 try:
     from numba.experimental import jitclass
 except ModuleNotFoundError:
     from numba import jitclass
-from copy import deepcopy
+from copy import copy, deepcopy
 
 # abspath = os.path.abspath(__file__)
 # dname = os.path.dirname(abspath)
@@ -28,7 +29,7 @@ from copy import deepcopy
 
 
 print(' '+'*'*55 + '\n'+
-     ' *                PyCrystalField 2.3.11               *\n' +
+     ' *                PyCrystalField 2.4.1                *\n' +
     #' *  Code to calculate the crystal Field Hamiltonian    *\n' +
     #' *   of magentic ions.                                 *\n' +
     ' *  Please cite  J. Appl. Cryst. (2021). 54, 356-362   * \n' +
@@ -199,6 +200,9 @@ class Ligands:
         except AttributeError:
             self.suppressmm = suppressminusm
 
+        ## Added 1/27/2: store for future reference
+        self.LigandCharge = LigandCharge
+        self.symequiv = symequiv
 
         if symequiv == None:
             # charge = IonCharge*[LigandCharge]*len(self.bonds)
@@ -263,6 +267,7 @@ class Ligands:
                 self.H += B*StevensOp(ionJ,n,m)
             self.B.append(B)
         self.B = np.array(self.B)
+        self.BnmLabels = bnm_labels
 
         newobj = CFLevels.Hamiltonian(self.H)
         newobj.O = OOO
@@ -1010,6 +1015,26 @@ class CFLevels:
             TotalTransition += self._transition(Ket(self.eigenvectors[1]),Ket(ev))
         print(TotalTransition, '  ', self.J*(self.J+1))
 
+    def __deepcopy__(self, memo):
+        """Custom deepcopy that copies all instance variables"""
+        # Create new instance without calling __init__
+        cls = self.__class__
+        new_obj = cls.__new__(cls)
+        
+        # Add to memo to handle circular references
+        memo[id(self)] = new_obj
+        
+        # Deep copy all attributes
+        for key, value in self.__dict__.items():
+            try:
+                setattr(new_obj, key, deepcopy(value, memo))
+            except TypeError: 
+                new_obj.opttran = opttransition(Operator.Jx(self.J).O, 
+                                                Operator.Jy(self.J).O.imag, 
+                                                Operator.Jz(self.J).O)
+        
+        return new_obj
+    
 
 
 
@@ -1040,7 +1065,6 @@ class opttransition(object):
         ay = np.dot(ket1, np.dot(self.Jy, ket2))**2
         az = np.dot(ket1, np.dot(self.Jz, ket2))**2
         return ax + ay + az
-
 
 
 
@@ -2124,6 +2148,23 @@ class LS_CFLevels:
                 ' & '.join([str(eevv) for eevv in self._Re(sortEVec[i])]), '\\tabularnewline')
         print('\\end{tabular}\\end{ruledtabular}')
         print('\\label{flo:Eigenvectors}\n\\end{landscape}\n\\end{table*}')
+
+
+    def __deepcopy__(self, memo):
+        """Custom deepcopy that copies all instance variables"""
+        # Create new instance without calling __init__
+        cls = self.__class__
+        new_obj = cls.__new__(cls)
+        
+        # Add to memo to handle circular references
+        memo[id(self)] = new_obj
+        
+        # Deep copy all attributes
+        for key, value in self.__dict__.items():
+            setattr(new_obj, key, deepcopy(value, memo))
+                
+        return new_obj
+    
 
 
 
